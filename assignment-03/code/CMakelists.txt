@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(DrawTrajectory)
+
+set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "-03")
+
+include_directories("/usr/include/eigen3")
+include_directories("/usr/include/pangolin")
+include_directories("/usr/include/sophus")
+
+add_executable(draw_trajectory draw_trajectory.cpp)
