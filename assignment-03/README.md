@@ -30,11 +30,11 @@
 
 ## 推导 SE(3) 的指数映射
 
-见 [se3.png](se3.png)
+见 [se3.png](assets/se3.png)
 
 ## 伴随
 
-见 [adjoint.png](adjoint.png)
+见 [adjoint.png](assets/adjoint.png)
 
 ## 轨迹的描绘
 

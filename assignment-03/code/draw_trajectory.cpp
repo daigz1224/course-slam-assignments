@@ -1,4 +1,4 @@
-#include <sophus/se3.h>
+#include <sophus/se3.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -6,22 +6,16 @@
 // need pangolin for plotting trajectory
 #include <pangolin/pangolin.h>
 
-using namespace std;
+#include <unistd.h>
 
-// path to trajectory file
-string trajectory_file = "./trajectory.txt";
+using namespace std;
 
 // function for plotting trajectory, don't edit this code
 // start point is red and end point is blue
-void DrawTrajectory(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>>);
+void DrawTrajectory(vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>>);
 
-void DrawTrajectory(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> truth_poses,
-                    vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> etimated_poses) {
-    if (poses.empty()) {
-        cerr << "Trajectory is empty!" << endl;
-        return;
-    }
-
+void DrawTrajectory(vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> truth_poses,
+                    vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> estimated_poses) {
     // create pangolin window and plot the trajectory
     pangolin::CreateWindowAndBind("Trajectory Viewer", 1024, 768);
     glEnable(GL_DEPTH_TEST);
@@ -56,7 +50,7 @@ void DrawTrajectory(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> t
 
             glColor3f(0.0f, 0.0f, 1.0f);
             glBegin(GL_LINES);
-            auto p1 = estimated_poses[i], p2 = estimated_poses[i + 1];
+            p1 = estimated_poses[i]; p2 = estimated_poses[i + 1];
             glVertex3d(p1.translation()[0], p1.translation()[1], p1.translation()[2]);
             glVertex3d(p2.translation()[0], p2.translation()[1], p2.translation()[2]);
             glEnd();
@@ -66,8 +60,8 @@ void DrawTrajectory(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> t
     }
 }
 
-void CalculateRMSE(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> truth_poses,
-                   vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> etimated_poses) {
+double CalculateRMSE(vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> truth_poses,
+                   vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> etimated_poses) {
     Eigen::Matrix<double, 6, 1> se3;
     double rmse = 0.;
     for (int i = 0; i < truth_poses.size(); ++i) {
@@ -78,7 +72,7 @@ void CalculateRMSE(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> tr
     return rmse;
 }
 
-void ReadPoses(string trajectory_file, vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> poses) {
+void ReadPoses(string &trajectory_file, vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> &poses) {
     ifstream in(trajectory_file);
     double t, tx, ty, tz, qx, qy, qz, qw;
     while (!in.eof()) {
@@ -91,15 +85,18 @@ void ReadPoses(string trajectory_file, vector<Sophus::SE3, Eigen::aligned_alloca
         in >> qz;
         in >> qw;
         poses.emplace_back(
-            Sophus:::SE3(
-                Eigen::Quaterniond(q_w,q_x,q_y,q_z),
-                Eigen::Vector3d(t_x,t_y,t_z)))
+            Sophus::SE3<double>(
+                Eigen::Quaterniond(qw, qx, qy, qz),
+                Eigen::Vector3d(tx, ty, tz)));
     }
+    cout << "read " << poses.size() << " poses from " << trajectory_file << endl;
 }
 
 int main(int argc, char **argv) {
+    // path to trajectory file
+    string trajectory_file = "./trajectory.txt";
 
-    vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> poses;
+    vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> poses;
 
     /// implement pose reading code
     // start your code here (5~10 lines)
@@ -114,7 +111,7 @@ int main(int argc, char **argv) {
 }
 
 /*******************************************************************************************/
-void DrawTrajectory(vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> poses) {
+void DrawTrajectory(vector<Sophus::SE3<double>, Eigen::aligned_allocator<Sophus::SE3<double>>> poses) {
     if (poses.empty()) {
         cerr << "Trajectory is empty!" << endl;
         return;
