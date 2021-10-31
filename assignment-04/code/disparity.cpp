@@ -12,9 +12,9 @@ using namespace std;
 using namespace Eigen;
 
 // 文件路径，如果不对，请调整
-string left_file = "./left.png";
-string right_file = "./right.png";
-string disparity_file = "./disparity.png";
+string left_file = "./assets/left.png";
+string right_file = "./assets/right.png";
+string disparity_file = "./assets/disparity.png";
 
 // 在panglin中画图，已写好，无需调整
 void showPointCloud(const vector<Vector4d, Eigen::aligned_allocator<Vector4d>> &pointcloud);
@@ -43,6 +43,15 @@ int main(int argc, char **argv) {
 
             // start your code here (~6 lines)
             // 根据双目模型计算 point 的位置
+
+            double x = (u - cx) / fx, y = (v - cy) / fy;
+            float disp = disparity.at<uchar>(v, u);
+            double depth = fx * d / disp;
+            point[0] = x * depth;
+            point[1] = y * depth;
+            point[2] = depth;
+            pointcloud.push_back(point);
+
             // end your code here
         }
 

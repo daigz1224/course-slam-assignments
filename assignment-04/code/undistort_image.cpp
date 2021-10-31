@@ -7,7 +7,7 @@
 
 using namespace std;
 
-string image_file = "./test.png";   // 请确保路径正确
+string image_file = "./assets/test.png";   // 请确保路径正确
 
 int main(int argc, char **argv) {
 
@@ -29,9 +29,13 @@ int main(int argc, char **argv) {
             // TODO 按照公式，计算点(u,v)对应到畸变图像中的坐标(u_distorted, v_distorted) (~6 lines)
             // start your code here
 
-            double r2 = u * u + v * v;
-            u_distorted = u * (1 + k1 * r2 + k2 * r2 * r2) + 2 * p1 * u * v + p2 * (r2 + 2 * u * u);
-            v_distorted = v * (1 + k1 * r2 + k2 * r2 * r2) + p1 * (r2 + 2 * v * v) + 2 * p2 * u * v;
+            double x = (u - cx) / fx, y = (v - cy) / fy;
+            double r2 = x * x + y * y;
+            double x_distorted = x * (1 + k1 * r2 + k2 * r2 * r2) + 2 * p1 * x * y + p2 * (r2 + 2 * x * x);
+            double y_distorted = y * (1 + k1 * r2 + k2 * r2 * r2) + 2 * p2 * x * y + p1 * (r2 + 2 * y * y);
+            u_distorted = x_distorted * fx + cx;
+            v_distorted = y_distorted * fy + cy;
+
             
             // end your code here
 
@@ -44,8 +48,9 @@ int main(int argc, char **argv) {
         }
 
     // 画图去畸变后图像
-    cv::imshow("image undistorted", image_undistort);
-    cv::waitKey();
+    // cv::imshow("image undistorted", image_undistort);
+    // cv::waitKey();
+    cv::imwrite("./assets/test_undistort.png", image_undistort);
 
     return 0;
 }
