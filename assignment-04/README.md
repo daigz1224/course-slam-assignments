@@ -29,9 +29,9 @@
 
 ## 矩阵运算微分
 
-1. 证明如图 [differential-01.png](differential-01.png)
-2. 证明如图 [differential-02.png](differential-02.png)
-3. 证明如图 [differential-03.png](differential-03.png)
+1. 证明如图 [differential-01.jpg](differential-01.jpg)
+2. 证明如图 [differential-02.jpg](differential-02.jpg)
+3. 证明如图 [differential-03.jpg](differential-03.jpg)
 
 ## 高斯牛顿法的曲线拟合实验
 
@@ -54,4 +54,4 @@
 
 ## 批量最大似然估计
 
-见 [batch_MLE.png](batch_MLE.png)
+见 [batch_MLE.jpg](batch_MLE.jpg)
